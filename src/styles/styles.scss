@@ -3,17 +3,15 @@ $vin-blue: #5bb7db;
 $vin-green: #60b044;
 $vin-red: #ff0000;
 
+@import url('https://fonts.googleapis.com/css?family=Livvic&display=swap');
+
 /* Styles */
 body {
-  font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-family: 'Livvic', sans-serif;
   line-height: 1.4em;
   color: #4d4d4d;
-  min-width: 230px;
-  max-width: 550px;
   margin: 0 auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-font-smoothing: antialiased;
-  font-smoothing: antialiased;
   font-weight: 300;
 }
 
@@ -28,4 +26,16 @@ h2 {
 .savings { color: $vin-green; }
 .loss { color: $vin-red; }
 input.small { width: 46px; }
-td.fuel-savings-label { width: 175px; }
+input {
+  border-radius: 3px;
+  padding: 6px 13px;
+  border: none;
+  font-size: 16px;
+  font-family: 'Livvic', sans-serif;
+  transition: box-shadow .3s ease-out;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 18px #d81b60;
+  }
+}
