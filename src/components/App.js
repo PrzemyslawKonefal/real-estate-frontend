@@ -9,7 +9,6 @@ import React from "react";
 import { hot } from "react-hot-loader";
 import styled from 'styled-components'
 
-
 const Main = styled.main`
   position: relative;
   top: 70px;

@@ -1,11 +1,11 @@
 const searchInitialState = (isHomePage) => {
   const lastSearchedUrl = localStorage.getItem('LAST_SEARCHED_URL')
   return isHomePage || !lastSearchedUrl ? {
-      city: '',
-      propertyType: 'apartment',
-      dealType: 'rent',
-      priceMin: 0,
-      priceMax: 0,
+      region: '',
+      propertyType: 'Mieszkanie',
+      dealType: 'Wynajem',
+      'price-min': 0,
+      'price-max': 0,
   } : lastSearchedUrl;
 };
 

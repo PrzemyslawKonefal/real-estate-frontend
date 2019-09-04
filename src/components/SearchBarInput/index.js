@@ -1,26 +1,41 @@
 import React from 'react';
-import { ItemWrapper, ItemTitle } from './styles';
-import { Input, Dropdown } from 'semantic-ui-react';
+import { ItemWrapper, ItemValue, DropdownButton, PriceWrapper, PriceInput } from './styles';
+import { prices } from "../SearchBar/searchParamsLists";
 
-function SearchBarInput({label, iconName, options, onValueChange}) {
-  const dropdownOptions = options.map(option => (
-    <Dropdown.Item {...option} />
-  ));
+function SearchBarInput({label, iconName, options, onValueChange, value, type}) {
+  const itemValue = type === 'price'
+    ? (
+      <PriceWrapper>
+        <PriceInput label="Od" list='prices'  onChange={(e) => onValueChange(e, 'price-min')}/>
+        <PriceInput label="Do" list='prices'  onChange={(e) => onValueChange(e, 'price-max')}/>
+        <datalist id='prices'>
+          {
+            prices.map(city => (
+              <option value={city.value} key={city.key} />
+            ))
+          }
+        </datalist>
+      </PriceWrapper>
+    )
+    : (
+      <ItemValue filled={!!value}>
+        {value}
+      </ItemValue>
+    )
   return (
     <ItemWrapper>
-      <Dropdown
+      <DropdownButton
         text={label}
         icon={iconName}
         labeled
         floating
         button
-        className='icon'
-        onClick={(val, d) => console.log(val, d)}
-      >
-        <Dropdown.Menu>
-          {dropdownOptions}
-        </Dropdown.Menu>
-      </Dropdown>
+        onChange={onValueChange}
+        options={options}
+        className="icon"
+        eventless={type}
+      />
+      {itemValue}
     </ItemWrapper>
   );
 };
