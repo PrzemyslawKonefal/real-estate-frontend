@@ -15,7 +15,5 @@ function parseSearchParams(params) {
 }
 
 export function searchOffers(params) {
-  console.log(parseSearchParams(params))
-
   return request.get(`/search?${parseSearchParams(params)}`)
 }

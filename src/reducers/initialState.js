@@ -14,5 +14,11 @@ export default {
       annual: 0,
       threeYear: 0
     }
+  },
+  search: {
+    loading: false,
+    offers: [],
+    visibleOffers: [],
+    hasMoreContent: false
   }
 };

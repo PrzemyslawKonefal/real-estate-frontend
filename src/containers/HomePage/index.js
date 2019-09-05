@@ -1,24 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import SearchBar from "../../components/SearchBar";
+import { connect } from 'react-redux';
 
-export function HomePage() {
+import SearchBar from "../../components/SearchBar";
+import OffersPlaceholder from "../../components/OffersPlaceholder";
+import NoSearchResultsMessage from "../../components/NoSearchResultsMessage";
+import OfferItem from "../../components/OfferItem";
+import { OffersWrapper } from './styles.js'
+
+export function HomePage({ offers, hasMoreContent, loading}) {
+  const offersList = (() => {
+    if (loading) return <OffersPlaceholder/>;
+    if (!offers.length) return <NoSearchResultsMessage/>;
+    return offers.map((offer) => (
+      <OfferItem key={offer.href} {...offer} />
+    ))
+  })();
   return (
     <React.Fragment>
       <SearchBar/>
+      <OffersWrapper>
+        {offersList}
+      </OffersWrapper>
     </React.Fragment>
   )
 }
 
 HomePage.propTypes = {
-
+  offers: PropTypes.array.isRequired,
+  hasMoreContent: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-
+    offers: state.search.visibleOffers,
+    hasMoreContent: state.search.hasMoreContent,
+    loading: state.search.loading
   };
 }
 

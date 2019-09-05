@@ -1,17 +1,18 @@
 import React, { useReducer , useState} from 'react';
-import { SearchBarWrapper, InputCity, SearchButton, MoreOptionsButton, MoreOptionsWrapper } from './styles';
+import { SearchWrapper, MainSearchBarWrapper, InputCity, SearchButton, MoreOptionsButton } from './styles';
+import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
+import { connect } from "react-redux";
 
 import SearchBarInput from '../SearchBarInput';
 import initialiseSearchParams from '../../utils/searchState';
-
+import { searchNewOffers } from '../../actions/searchActions';
 import { cities, propertyTypes, dealTypes } from './searchParamsLists';
-import { searchOffers } from '../../utils/api/search'
 
 const initialSearchState = initialiseSearchParams();
 
 function reducer(state, action) {
-  switch(action.type) {
+  switch (action.type) {
     case 'paramChange': {
       const newState = { ...state };
       newState[action.fieldName] = action.value;
@@ -20,23 +21,16 @@ function reducer(state, action) {
   }
 }
 
-function SearchBar() {
+function SearchBar({ searchOffers }) {
   const [moreOptionsOpen, setMoreOptionsOpen] = useState(false)
   const [state, dispatch] = useReducer(reducer, initialSearchState)
   const inputCityOptions = cities.map(city => (
     <option value={city.value} key={city.key} />
   ));
 
-  const handleSearch = () => {
-    console.log(state)
-    searchOffers(state).then((res) => {
-      console.log(res.data)
-    }).catch(e => console.log(e))
-  }
-
   return (
-    <React.Fragment>
-      <SearchBarWrapper>
+    <SearchWrapper>
+      <MainSearchBarWrapper>
         <InputCity
           list='cities'
           icon='map marker alternate red'
@@ -65,15 +59,37 @@ function SearchBar() {
           type="price"
           label="Cena w zł"
           iconName="money"
-          onValueChange={({target}, fieldName) => dispatch({type: 'paramChange', fieldName, value: Number(target.value)})}
+          onValueChange={({target}, fieldName) => dispatch({type: 'paramChange', fieldName, value: Number(target.value.replace(/\s/, ''))})}
         />
-        <SearchButton icon onClick={handleSearch}>
+        <SearchButton icon onClick={() => searchOffers(state)}>
           <Icon name="search"/>
         </SearchButton>
-        <MoreOptionsButton onClick={() => setMoreOptionsOpen(!moreOptionsOpen)} icon={`angle ${moreOptionsOpen ? 'up' : 'down'}`} content="Szczegółowe wyszukiwanie"/>
-      </SearchBarWrapper>
-    </React.Fragment>
+      </MainSearchBarWrapper>
+      <MoreOptionsButton
+        onClick={() => setMoreOptionsOpen(!moreOptionsOpen)}
+        icon={`angle ${moreOptionsOpen ? 'up' : 'down'}`}
+        content="Szczegółowe wyszukiwanie"
+      />
+    </SearchWrapper>
   );
+}
+
+SearchBar.propTypes = {
+  searchOffers: PropTypes.func.isRequired
 };
 
-export default SearchBar;
+function mapStateToProps() {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    searchOffers: (params) => { dispatch(searchNewOffers(params)) }
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchBar);
+
